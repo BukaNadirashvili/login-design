@@ -12,7 +12,11 @@ if(!class_exists('LoginDesignAdmin')) :
 
         function __construct() {
             add_action( 'admin_menu', array( $this, 'login_design_page' ) );
+			add_filter( 'login_headerurl', array($this, 'login_design_header_url'));
             add_action( 'admin_init', array( $this, 'login_design_init' ) );
+			add_action( 'login_head', array( $this, 'login_design_head' ) );
+			add_action( 'login_footer', array( $this, 'login_design_title_display' ) );
+			add_filter( 'admin_footer_text', array( $this, 'login_design_admin_footer_text' ) );
         }
 
 		/**
@@ -86,6 +90,34 @@ if(!class_exists('LoginDesignAdmin')) :
 			);
 
 			add_settings_field(
+				'ld_logo',
+				__( 'Logo Image Url:', LOGIN_DESIGN_TEXT_DOMAIN ),
+				array( $this, 'form_url' ),
+				LOGIN_DESIGN_PAGE,
+				LOGIN_DESIGN_SECTION,
+				array(
+					'id' => 'ld_logo',
+					'value' => $vars,
+					'default' => '',
+					'description' => __( 'Ideal size is 312 by 600', LOGIN_DESIGN_TEXT_DOMAIN ),
+				)
+			);
+
+			
+			add_settings_field(
+				'ld_header_url',
+				__( 'Logo Url:', LOGIN_DESIGN_TEXT_DOMAIN ),
+				array( $this, 'form_url' ),
+				LOGIN_DESIGN_PAGE,
+				LOGIN_DESIGN_SECTION,
+				array(
+					'id' => 'ld_header_url',
+					'value' => $vars,
+					'default' => '',
+				)
+			);
+
+			add_settings_field(
 				'ld_background',
 				__( 'Background Image Url:', LOGIN_DESIGN_TEXT_DOMAIN ),
 				array( $this, 'form_url' ),
@@ -95,7 +127,34 @@ if(!class_exists('LoginDesignAdmin')) :
 					'id' => 'ld_background',
 					'value' => $vars,
 					'default' => '',
-					'description' => __( 'Ideal size is 312 by 600', LOGIN_DESIGN_TEXT_DOMAIN ),
+				)
+			);
+
+			add_settings_field(
+				'ld_powerby',
+				__( 'Custom Login Powered by:', LOGIN_DESIGN_TEXT_DOMAIN ),
+				array( $this, 'form_text' ),
+				LOGIN_DESIGN_PAGE,
+				LOGIN_DESIGN_SECTION,
+				array(
+					'id' => 'ld_powerby',
+					'value' => $vars,
+					'default' => '',
+					'description' => '',
+				)
+			);
+
+			add_settings_field(
+				'ld_footertext',
+				__( 'WordPress footer text:', LOGIN_DESIGN_TEXT_DOMAIN ),
+				array( $this, 'form_text' ),
+				LOGIN_DESIGN_PAGE,
+				LOGIN_DESIGN_SECTION,
+				array(
+					'id' => 'ld_footertext',
+					'value' => $vars,
+					'default' => '',
+					'description' => __( 'Appears at the bottom of the admin pages when logged in.', LOGIN_DESIGN_TEXT_DOMAIN ),
 				)
 			);
 
@@ -117,7 +176,12 @@ if(!class_exists('LoginDesignAdmin')) :
 					$this->options = wp_parse_args(
 						$saved_options,
 						array(
-							'ld_background' => '',
+							'ld_logo' 	  	 	=> '',
+							'ld_header_url' 	=> '',
+							'ld_background'  	=> '',
+							'ld_powerby' 	 	=> '',
+							'ld_footer_text' 	=> '',
+							'ld_update_footer'  => '',
 						)
 					);
 				}
@@ -129,6 +193,72 @@ if(!class_exists('LoginDesignAdmin')) :
 
         function login_design_section_validate() {
         }
+
+		/**
+		 * Display the custom login info
+		 */
+		function login_design_head() {
+
+			$options = $this->login_design_get_options();
+			
+			echo '<link rel="stylesheet" type="text/css" href="' . esc_url( LOGIN_DESIGN_DIR_URL . 'assets/css/style.css' ) . '" />';
+			// Output styles.
+			echo '<style>';
+
+			if ( ! empty( $options['ld_logo'] ) ) {
+?>
+			#login > h1 > a {
+				background: url(<?php echo esc_url( $options['ld_logo'] ); ?>);
+			}				
+				
+<?php
+			}
+
+			if ( ! empty(  $options['ld_background'] ) ) {
+?>
+			#login {
+				background:url(<?php echo esc_url( $options['ld_background'] ); ?>) top center no-repeat;
+			}
+<?php
+			}
+
+
+
+			echo '</style>';
+
+		}
+
+		function login_design_header_url($login_header_url) {
+			
+			$options = $this->login_design_get_options();
+
+			if ( empty( $options['ld_header_url'] ) )
+				return;
+
+			$url = $options['ld_header_url'];
+			
+			return $url;
+		}
+
+		function login_design_title_display() {
+
+			$options = $this->login_design_get_options();
+
+			if ( empty( $options['ld_powerby'] ) )
+				return;
+
+			$powered_by = $options['ld_powerby'];
+
+			echo '<p class="ld-powered-by" aria-hidden="true">' . esc_html( $powered_by ) . '</p>';
+		}
+
+		function login_design_admin_footer_text($old_text) {
+			
+			$options = $this->login_design_get_options();
+			
+			return !empty( $options['ld_footertext']) ? esc_html( $options['ld_footertext'] ) : wp_kses_post( $old_text );
+
+		}
 
     }
 endif;
