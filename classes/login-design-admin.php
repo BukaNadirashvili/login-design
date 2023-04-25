@@ -260,6 +260,7 @@ if(!class_exists('LoginDesignAdmin')) :
 		}
 
 		function login_design_validate($fields) {
+			
 			$fields['ld_logo'] 		  = esc_url_raw( $fields['ld_logo'] );
 			$fields['ld_header_url']  = esc_url_raw( $fields['ld_header_url'] );
 			$fields['ld_background']  = esc_url_raw( $fields['ld_background'] );
