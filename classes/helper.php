@@ -54,8 +54,27 @@ if(!class_exists('Helper')) :
 ?>
 		<input type="text" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( LOGIN_DESIGN_OPTIONS ); ?>[<?php echo esc_html( $id ); ?>]" value="<?php echo esc_attr( $value ); ?>" class="regular-text" />
 <?php
-			if ( ! empty( $args['description'] ) ) {
+			if ( ! empty( $description ) ) {
 				echo '<br /><span class="description">' . esc_html( $description ) . '</span>';
+			}
+
+		}
+
+		/**
+		 * Display a textarea form control.
+		 *
+		 * @param array $args Control arguments.
+		 */
+		public function form_textarea( $args ) {
+
+			$id = $args['id'];
+			$description = !empty( $args['description'] ) ? $args['description'] : '';
+			$value = $this->get_value($args);
+?>
+		<textarea type="text" rows="10" cols="50" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( LOGIN_DESIGN_OPTIONS ); ?>[<?php echo esc_html( $id ); ?>]"><?php echo esc_textarea( $value ); ?></textarea>
+<?php
+			if ( ! empty( $description ) ) {
+				echo '<p class="description">' . esc_html( $description ) . '</p>';
 			}
 
 		}

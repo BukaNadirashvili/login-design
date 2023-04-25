@@ -181,7 +181,6 @@ if(!class_exists('LoginDesignAdmin')) :
 							'ld_background'  	=> '',
 							'ld_powerby' 	 	=> '',
 							'ld_footer_text' 	=> '',
-							'ld_update_footer'  => '',
 						)
 					);
 				}
@@ -258,6 +257,16 @@ if(!class_exists('LoginDesignAdmin')) :
 			
 			return !empty( $options['ld_footertext']) ? esc_html( $options['ld_footertext'] ) : wp_kses_post( $old_text );
 
+		}
+
+		function login_design_validate($fields) {
+			$fields['ld_logo'] 		  = esc_url_raw( $fields['ld_logo'] );
+			$fields['ld_header_url']  = esc_url_raw( $fields['ld_header_url'] );
+			$fields['ld_background']  = esc_url_raw( $fields['ld_background'] );
+			$fields['ld_powerby'] 	  = wp_strip_all_tags( esc_html( $fields['ld_powerby'] ) );
+			$fields['ld_footer_text'] = wp_strip_all_tags( esc_html( $fields['ld_footer_text'] ) );
+
+			return $fields;
 		}
 
     }
