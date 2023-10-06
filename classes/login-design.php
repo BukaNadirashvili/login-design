@@ -3,9 +3,9 @@
 if(!class_exists('LoginDesign')) :
 
     /**
-	 * Main Login Design Class.
+     * Main Login Design Class.
 	 *
-	 */
+    */
     class LoginDesign {
 
         private static $instance;
@@ -17,14 +17,14 @@ if(!class_exists('LoginDesign')) :
         }
 
         /**
-		 * LoginDesign Instance.
-		 *
-		 * Insures that only one instance of LoginDesign exists in memory at any one
-		 * time. Also prevents needing to define globals all over the place.
-		 * 
-		 * @static
-		 * @return object|LoginDesign
-		 */
+         * LoginDesign Instance.
+         *
+         * Insures that only one instance of LoginDesign exists in memory at any one
+         * time. Also prevents needing to define globals all over the place.
+         *
+         * @static
+         * @return object|LoginDesign
+        */
         static function instance(){
 
             if(!isset( self::$instance ) && !( self::$instance instanceof LoginDesign )) {
@@ -33,10 +33,10 @@ if(!class_exists('LoginDesign')) :
         }
 
         /**
-		 * Define constants for plugin
-		 *
-		 * @return void
-		 */
+         * Define constants for plugin
+         *
+         * @return void
+        */
         function define_constants() {
             define( 'LOGIN_DESIGN_GROUP', 'login_design' );
             define( 'LOGIN_DESIGN_PAGE', 'login-design-admin' );
@@ -46,10 +46,10 @@ if(!class_exists('LoginDesign')) :
         }
 
         /**
-		 * Require plugin files
-		 *
-		 * @return void
-		 */
+         * Require plugin files
+         *
+         * @return void
+        */
         function require_files() {
             require_once 'helper.php';
             require_once 'login-design-admin.php';
