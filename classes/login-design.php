@@ -4,7 +4,7 @@ if(!class_exists('LoginDesign')) :
 
     /**
      * Main Login Design Class.
-	 *
+     *
     */
     class LoginDesign {
 
